@@ -1,26 +1,160 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@theme {
+  --font-sans: var(--font-geist-sans), system-ui, sans-serif;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  /* Color de marca */
+  --color-brand: #0037c2;
+  --color-brand-dark: #002b99;
+  --color-brand-light: #3b6bff;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  /* Escala neutra */
+  --color-ink-950: #05070f;
+  --color-ink-900: #0a0f1c;
+  --color-ink-800: #141b2d;
+  --color-ink-700: #2a3448;
+  --color-ink-500: #5b6577;
+  --color-ink-300: #c7cdd8;
+  --color-ink-200: #e4e7ec;
+  --color-ink-100: #f2f4f7;
+  --color-ink-50: #fafbfc;
+
+  --tracking-headline: -0.02em;
+
+  --animate-fade-up: fade-up 0.6s ease-out both;
+  --animate-nudge: nudge 1.9s ease-in-out infinite;
+
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes nudge {
+    0%, 100% { transform: translateY(0); opacity: 0.55; }
+    50% { transform: translateY(7px); opacity: 1; }
   }
 }
 
+html {
+  scroll-behavior: smooth;
+  /* Compensa la navbar fija de 80px al saltar a un ancla */
+  scroll-padding-top: 80px;
+  overflow-x: clip;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: #ffffff;
+  color: var(--color-ink-900);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--color-brand);
+  color: #ffffff;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@layer components {
+  /* Titular: mayúsculas, muy compacto */
+  .headline {
+    @apply font-black uppercase leading-[0.95] tracking-headline;
+  }
+
+  .eyebrow {
+    @apply text-[11px] font-bold uppercase tracking-[0.28em] text-brand;
+  }
+
+  .section {
+    @apply px-6 py-24 md:py-32;
+  }
+
+  .container-x {
+    @apply mx-auto w-full max-w-6xl;
+  }
+
+  .body-text {
+    @apply text-[15px] leading-relaxed text-ink-500;
+  }
+
+  /* --- Botones: el relleno al pasar el ratón es un degradado que se desplaza */
+  .btn-primary {
+    @apply relative inline-flex items-center justify-center gap-2.5 px-8 py-4
+           text-[12px] font-bold uppercase tracking-[0.18em] text-white;
+    background-color: var(--color-brand);
+    background-image: linear-gradient(to right, var(--color-ink-900) 50%, transparent 50%);
+    background-size: 202% 100%;
+    background-position: 100% 0;
+    background-repeat: no-repeat;
+    transition: background-position 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .btn-primary:hover {
+    background-position: 0 0;
+  }
+
+  .btn-primary:focus-visible {
+    outline: 2px solid var(--color-brand-light);
+    outline-offset: 3px;
+  }
+
+  .btn-primary svg {
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .btn-primary:hover svg {
+    transform: translateX(4px);
+  }
+
+  /* Caja de icono que se rellena al pasar por encima de su tarjeta */
+  .icon-box {
+    @apply relative grid place-items-center overflow-hidden border border-brand/25 text-brand;
+  }
+
+  .icon-box::before {
+    content: "";
+    @apply absolute inset-0 bg-brand;
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .icon-box svg {
+    @apply relative z-10;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), color 0.3s ease;
+  }
+
+  .group:hover .icon-box::before {
+    transform: scaleY(1);
+  }
+
+  .group:hover .icon-box svg {
+    color: #ffffff;
+    transform: scale(1.12) rotate(-6deg);
+  }
+
+  /* Subrayado animado de los enlaces de navegación */
+  .nav-link {
+    @apply relative text-[11px] font-bold uppercase tracking-[0.2em] transition-colors duration-300;
+  }
+
+  .nav-link::after {
+    content: "";
+    @apply absolute -bottom-1.5 left-0 h-px w-full bg-current;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .nav-link:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
 }
