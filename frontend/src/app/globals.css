@@ -113,33 +113,6 @@ body {
     transform: translateX(4px);
   }
 
-  /* Caja de icono que se rellena al pasar por encima de su tarjeta */
-  .icon-box {
-    @apply relative grid place-items-center overflow-hidden border border-brand/25 text-brand;
-  }
-
-  .icon-box::before {
-    content: "";
-    @apply absolute inset-0 bg-brand;
-    transform: scaleY(0);
-    transform-origin: bottom;
-    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .icon-box svg {
-    @apply relative z-10;
-    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), color 0.3s ease;
-  }
-
-  .group:hover .icon-box::before {
-    transform: scaleY(1);
-  }
-
-  .group:hover .icon-box svg {
-    color: #ffffff;
-    transform: scale(1.12) rotate(-6deg);
-  }
-
   /* Subrayado animado de los enlaces de navegación */
   .nav-link {
     @apply relative text-[11px] font-bold uppercase tracking-[0.2em] transition-colors duration-300;
